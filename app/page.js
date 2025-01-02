@@ -1,95 +1,76 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client'
+
+import React, { useEffect } from 'react';
+import "./page.css";
+import Image from 'next/image';
+import Logo from './logo.png';
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('fade-in');
+            observer.unobserve(entry.target);
+          }
+        });
+      });
+      
+      document.querySelectorAll('.animate-on-scroll').forEach(element => {
+        observer.observe(element);
+      });
+    }
+  }, []);
+
+  return (
+    <div className="about-container">
+      <header className="header">
+        <section className="options">
+          <ul>
+            <li>
+              <a href="/login"><b>Entrar</b></a>
+            </li>
+            <li>
+              <a blank="_blank" href="/register">Cadastro</a>
+            </li>
+            <li>
+              <a target="_blank" href="#">Baixar no Google Play</a>
+            </li>
+          </ul>
+        </section>
+        <Image src={Logo} alt="Mini Wallet Online Logo"/>
+        <h1>Bem-vindo ao <span className="highlight">Mini Wallet On</span>!</h1>
+      </header>
+      <main className="content">
+        <section className="animate-on-scroll">
+          <p>Gerencie suas finanças com facilidade, simplicidade e eficiência usando o <span className="highlight">Mini Wallet On</span>, o app gratuito de controle de despesas projetado para tornar sua vida financeira mais organizada e tranquila.</p>
+        </section>
+        <section className="animate-on-scroll">
+          <h2>🌐 Dados Online</h2>
+          <p>Acesse suas informações financeiras de qualquer lugar, a qualquer hora. Agora nosso app é online, você tem a conveniência e a segurança que precisa para acompanhar suas finanças em tempo real.</p>
+        </section>
+        <section className="animate-on-scroll">
+          <h2>📊 Cadastro e Listagem de Despesas e Recebimentos</h2>
+          <p>Registre todas as suas despesas e recebimentos de forma rápida e intuitiva. Nosso app permite a listagem detalhada para que você nunca perca de vista suas transações.</p>
+        </section>
+        <section className="animate-on-scroll">
+          <h2>📈 Cálculo Automático de Saldo Mensal</h2>
+          <p>Deixe os cálculos com a gente! Nosso sistema calcula automaticamente o seu saldo mensal, permitindo que você veja facilmente quanto entrou, saiu w quanto vai sobrar do seu orçamento.</p>
+        </section>
+        <section className="animate-on-scroll">
+          <h2>✅ Controle dos Itens Pagos e a Pagar</h2>
+          <p>Mantenha-se no controle total dos seus compromissos financeiros. Marque itens como pagos ou a pagar, e acompanhe suas pendências com facilidade.</p>
+        </section>
+        <section className="animate-on-scroll">
+          <p>Transforme a maneira como você gerencia suas finanças pessoais gratuitamente com o <span className="highlight">Mini Wallet On</span>. Comece hoje e descubra uma nova forma de controlar seu dinheiro! 🚀</p>
+        </section>
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      <footer className="footer">
+        <p>&copy; {new Date().getFullYear()} Lucas Roberto Desenvolvimento. Todos os direitos reservados.</p>
       </footer>
     </div>
   );
 }
+
