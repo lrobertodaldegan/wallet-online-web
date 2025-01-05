@@ -2,6 +2,8 @@ import React from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
+import Image from 'next/image';
+import Logo from './img/logo.png';
 import api from '../api/api';
 import './page-styles.css';
 
@@ -12,7 +14,7 @@ const RegisterPage = () => {
   const onSubmit = (data) => {
     api.post('/auth/signup', data).then(response => {
       if (response.status === 201) {
-        router.push('/login');
+        router.push('login');
       } else {
         console.error('Erro no cadastro:', response.statusText);
       }
@@ -23,9 +25,11 @@ const RegisterPage = () => {
     <>
     <Head>
       <title>Mini Wallet On - Registro</title>
+      <link rel="icon" type="image/png" href="/favicon.png"/>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     </Head>
     <div className="register-container">
+      <Image src={Logo} alt="Mini Wallet Online Logo" className='login-logo'/>
       <h2>Cadastro</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="input-group">
@@ -53,6 +57,7 @@ const RegisterPage = () => {
           {errors.password && <p className="error">{errors.password.message}</p>}
         </div>
         <button type="submit">Cadastrar</button>
+        <button type="reset" onClick={() => router.back()}>Voltar</button>
       </form>
     </div>
     </>

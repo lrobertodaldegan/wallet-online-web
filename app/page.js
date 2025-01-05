@@ -30,10 +30,10 @@ export default function Home() {
         <section className="options">
           <ul>
             <li>
-              <a href="/login"><b>Entrar</b></a>
+              <a href="login"><b>Entrar</b></a>
             </li>
             <li>
-              <a blank="_blank" href="/register">Cadastro</a>
+              <a blank="_blank" href="register">Cadastro</a>
             </li>
             <li>
               <a target="_blank" href="#">Baixar no Google Play</a>

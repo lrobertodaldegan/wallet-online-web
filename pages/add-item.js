@@ -25,7 +25,7 @@ const AddItemPage = () => {
   React.useEffect(() => {
     const token = Cookies.get('wlt-token');
     if (!token) {
-      router.push('/login');
+      router.push('login');
     }
   }, [router]);
 
@@ -40,7 +40,7 @@ const AddItemPage = () => {
       if (response.status === 201) {
         console.log('Item cadastrado com sucesso:', response.data);
         // Redirecionar para a página de listagem de itens ou mostrar uma mensagem de sucesso
-        router.push('/items');
+        router.push('items');
       } else {
         console.error('Erro no cadastro do item:', response.statusText);
       }
@@ -56,6 +56,7 @@ const AddItemPage = () => {
     <>
     <Head>
       <title>Mini Wallet On - Novo item</title>
+      <link rel="icon" type="image/png" href="/favicon.png"/>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     </Head>
     <div className="add-item-container">
@@ -86,9 +87,9 @@ const AddItemPage = () => {
           <label>Tipo</label>
           <br/>
           <select {...register('type', { required: 'Tipo é obrigatório' })}>
-            <option value="">Selecione uma categoria</option>
+            <option value="">Selecione o tipo</option>
             {Types.map(t => (
-              <option value={t}>{t}</option>
+              <option key={t} value={t}>{t}</option>
             ))}
           </select>
           {errors.type && <p className="error">{errors.type.message}</p>}
@@ -99,7 +100,7 @@ const AddItemPage = () => {
           <select {...register('cat', { required: 'Categoria é obrigatória' })}>
             <option value="">Selecione uma categoria</option>
             {Cats.map(c => (
-              <option value={c}>{c}</option>
+              <option key={c} value={c}>{c}</option>
             ))}
           </select>
           {errors.cat && <p className="error">{errors.cat.message}</p>}
@@ -111,7 +112,7 @@ const AddItemPage = () => {
             <select {...register('month', { required: 'Mês é obrigatório' })}>
               <option value="">Selecione um mês</option>
               {Months.map(m => (
-                <option value={m}>{m}</option>
+                <option key={m} value={m}>{m}</option>
               ))}
             </select>
             {errors.month && <p className="error">{errors.month.message}</p>}
@@ -122,7 +123,7 @@ const AddItemPage = () => {
             <select {...register('year', { required: 'Ano é obrigatório' })}>
               <option value="">Selecione um ano</option>
               {Years.map(y => (
-                <option value={y}>{y}</option>
+                <option key={y} value={y}>{y}</option>
               ))}
             </select>
             {errors.year && <p className="error">{errors.year.message}</p>}
@@ -134,7 +135,7 @@ const AddItemPage = () => {
           <select {...register('rec', { required: 'Recorrência é obrigatória' })}>
             <option value="">Selecione uma categoria</option>
             {Recs.map(r => (
-              <option value={r}>{r}</option>
+              <option key={r} value={r}>{r}</option>
             ))}
           </select>
           {errors.rec && <p className="error">{errors.rec.message}</p>}

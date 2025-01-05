@@ -3,7 +3,7 @@
 body{
   font-family: 'Roboto', sans-serif;
   justify-content: center;
-  background-color: #e6e6e6;
+  background-color: #f0f0f0;
 }
 button{
   background-color: #000;
@@ -89,6 +89,31 @@ input, select {
   color:#28a745;
 }
 
+.register-container{
+  width: 50%;
+  padding:2% 5%;
+  margin: 2% auto;
+  border-radius: 10px;
+  background-color: #fafafa;
+  align-content: center;
+  box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.4);
+}
+.register-container img {
+  height: 60px;
+  width: auto;
+}
+.register-container .input-group{
+  margin:20px 0;
+}
+.register-container button{
+  width:100%;
+}
+.register-container button[type='reset']{
+  color: #000;
+  margin-top: 10px;
+  background-color: transparent;
+}
+
 .login-container {
   width: 80%;
   height: 500px;
@@ -132,9 +157,15 @@ input, select {
 }
 .login-container form button {
   width: 100%;
+  margin-top:5px;
 }
 .login-container form small {
   cursor: pointer;
+}
+.login-container form .lbl-error {
+  color: #ff0000;
+  font-size: 0.875em;
+  margin: 5px 0;
 }
 
 .add-item-container {
@@ -187,7 +218,7 @@ input, select {
   margin: 5% auto;
 }
 .items-container img{
-  height: 50px;
+  height: 70px;
   width: auto;
 }
 .items-container .items-header{
@@ -201,11 +232,45 @@ input, select {
 .items-container .items-filter{
   display: flex;
   align-items: center;
+  color:#333;
 }
-.items-container .items-filter select{
+.items-container select{
   width: auto;
   background: transparent;
   border:none;
+}
+.items-container .balance-values{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding:0 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  background-color: transparent;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
+}
+.items-container .balance-values p.balance-val{
+  font-weight: bold;
+  color: #007BFF;
+}
+.items-container .balance-values p.balance-val-n{
+  font-weight: bold;
+  color: #ff0000;
+}
+.items-container .pending-values{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  padding:0 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  background-color: #ffefcd;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
+}
+.items-container .pending-values p b{
+  color: #ff0000;
+  white-space: nowrap;
 }
 .items-container .item{
   border-radius: 10px;
@@ -237,6 +302,11 @@ input, select {
 }
 
 @media (max-width: 1200px) {
+  .register-container {
+    width: 90%;
+    margin: 5% auto;
+  }
+
   .login-container {
     width: 90%;
     height: 500px;
@@ -267,6 +337,17 @@ input, select {
   .items-container{
     width: 98%;
     margin: 1% auto;
+  }
+  .items-container .items-filter p,
+  .items-container .items-filter select{
+    font-size: .8em;
+  }
+  .items-container .item h3{
+    font-size: 1em;
+    white-space: break-spaces;
+  }
+  .items-container .item .item-header h4{
+    font-size: 1em;
   }
   .items-container .item-tags{
     width: 100%;

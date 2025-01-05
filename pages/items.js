@@ -22,7 +22,7 @@ const ItemsPage = () => {
     const token = Cookies.get('wlt-token');
 
     if (!token) {
-      router.push('/login');
+      router.push('login');
 
       return;
     }
@@ -40,21 +40,29 @@ const ItemsPage = () => {
   }, [month, year]);
 
   const fetchItems = () => {
-    const token = Cookies.get('wlt-token');
+    if(month && year){
+      const token = Cookies.get('wlt-token');
 
-    api.get(`/item?month=${month}&year=${year}`, {
-      headers: {
-        'Authorization': `${token}`,
-      }
-    }).then(response => {
-      setItems(response.data);
-    }).catch(error => console.error('Erro ao buscar itens:', error));
+      api.get(`/item?month=${month}&year=${year}&dt=${(new Date().getMilliseconds())}`, {
+        headers: {
+          'Authorization': `${token}`,
+        }
+      }).then(response => {
+        setItems(response.data);
+      }).catch(error => console.error('Erro ao buscar itens:', error));
+    }
   };
 
   const handleMarkItem = (item) => {
     const token = Cookies.get('wlt-token');
 
-    api.put(item.paid === true ? `/item/unpay` : `/item/pay`, {id:item._id}, {
+    let body = {
+      id:item._id,
+      month:month,
+      year:year
+    };
+
+    api.put(item.paid === true ? `/item/unpay` : `/item/pay`, body, {
       headers: {
         'Authorization': `${token}`,
       }
@@ -68,7 +76,7 @@ const ItemsPage = () => {
   const handleDelItem = (item) => {
     const token = Cookies.get('wlt-token');
 
-    api.delete(`/item?id=${item._id}`, {
+    api.delete(`/item?id=${item._id}&month=${month}&year=${year}`, {
       headers: {
         'Authorization': `${token}`,
       }
@@ -110,11 +118,15 @@ const ItemsPage = () => {
   };
 
   const renderPayTag = (item) => {
-    if(item.paid && item.paid === true){
-      return (<span className='tags tags-unp' onClick={() => handleMarkItem(item)}>↩️ Desfazer</span>);
-    } else {
-      return (<span className='tags tags-pay' onClick={() => handleMarkItem(item)}>✅ Pagar</span>);
+    if(item.type && item.type.includes('debit')){
+      if(item.paid && item.paid === true){
+        return (<span className='tags tags-unp' onClick={() => handleMarkItem(item)}>↩️ Desfazer</span>);
+      } else {
+        return (<span className='tags tags-pay' onClick={() => handleMarkItem(item)}>✅ Pagar</span>);
+      }
     }
+
+    return <></>;
   };
 
   const renderItemDate = (item) => {
@@ -127,17 +139,81 @@ const ItemsPage = () => {
     );
   };
 
+  const renderBalance = () => {
+    if(items && items.length > 0){
+      let val = 0;
+      
+      for(let i of items){
+        if(i.type.includes('debit'))
+          val -= i.val;
+        else
+          val += i.val;
+      }
+
+      let cName = 'balance-val';
+
+      if(val < 0)
+        cName = 'balance-val-n';
+
+      return (
+        <p className={cName}>{formatValues(val)}</p>
+      );
+    }
+
+    return <></>;
+  }
+
+  const renderSpent = () => {
+    if(items && items.length > 0){
+      let val = 0;
+      
+      for(let i of items){
+        if(i.type.includes('debit'))
+          val -= i.val;
+      }
+
+      let cName = 'balance-val-n';
+
+      return (
+        <p className={cName}>{formatValues(val)}</p>
+      );
+    }
+
+    return <></>;
+  }
+
+  const renderPendingLabel = () => {
+    if(items && items.length > 0){
+      let pendingQtd = 0;
+      let pendingValue = 0;
+      
+      for(let i of items){
+        if(i.paid === false && i.type.includes('debit')){
+          pendingValue -= i.val;
+          pendingQtd += 1;
+        }
+      }
+
+      return (
+        <p>Você ainda possui <b>{pendingQtd}</b> contas em aberto! (<b>{formatValues(pendingValue)}</b>)</p>
+      );
+    }
+
+    return <></>;
+  }
+
   return (
     <>
     <Head>
       <title>Mini Wallet On - Itens</title>
+      <link rel="icon" type="image/png" href="/favicon.png"/>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     </Head>
     <div className="items-container">
       <Image src={Logo} alt="Mini Wallet Online Logo" className='login-logo'/>
       <div className="items-header">
         <h2>Lista de Itens</h2>
-        <button onClick={() => router.push('/add-item')}>Adicionar item</button>
+        <button onClick={() => router.push('add-item')}>Adicionar item</button>
       </div>
       <div className="items-filter">
         <p>Filtro:</p>
@@ -154,6 +230,21 @@ const ItemsPage = () => {
             <option key={y} value={y}>{y}</option>
           ))}
         </select>
+      </div>
+
+      <div className="balance-values">
+        <div className='bv-totals'>
+          <p>Saldo:</p>
+          {renderBalance()}
+        </div>
+        <div className='bv-totals'>
+          <p>Saídas:</p>
+          {renderSpent()}
+        </div>
+      </div>
+
+      <div className='pending-values'>        
+        {renderPendingLabel()}
       </div>
 
       {items.map(item => (

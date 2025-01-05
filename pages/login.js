@@ -12,6 +12,7 @@ const LoginPage = () => {
   const router = useRouter();
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [showPass, setShowPass] = useState(false);
+  const [err, setErr] = useState(null);
 
   const onSubmit = (data) => {
     api.post('/auth/signin', data).then(response => {
@@ -20,17 +21,22 @@ const LoginPage = () => {
         // Cookie expira em 32 dias
         Cookies.set('wlt-token', response.data.token, { expires: 32 });
 
-        router.push('/items');
+        router.push('items');
       } else {
-        console.error('Erro no login:', response.statusText);
+        console.error('Erro no login:', response.data.message);
+        setErr(response.data.message);
       }
-    }).catch(error => console.error('Erro na requisição:', error));
+    }).catch(error => {
+      console.error('Erro na requisição:', error);
+      setErr('Não foi possível realizar o login! Revise os dados ou tente novamente mais tarde!');
+    });
   };
 
   return (
     <>
     <Head>
       <title>Mini Wallet On - Login</title>
+      <link rel="icon" type="image/png" href="/favicon.png"/>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     </Head>
     <div className="login-container">
@@ -55,6 +61,7 @@ const LoginPage = () => {
           <small onClick={() => setShowPass(!showPass)}>
             {showPass === true ? '🙈 Esconda a senha' : '👁️ Mostre a senha'}</small>
         </div>
+        {err && (<small className='lbl-error'>{err}</small>)}
         <button type="submit">Entrar</button>
       </form>
     </div>

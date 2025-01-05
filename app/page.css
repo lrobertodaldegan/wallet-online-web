@@ -126,3 +126,12 @@ ul a:hover {
   font-size: .8em;
 }
 
+
+@media (max-width: 1200px) {
+  .content {
+    margin:0;
+  }
+  .content section p{
+    text-indent: 1em;
+  }
+}
