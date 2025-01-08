@@ -15,8 +15,10 @@ const Years = [...YearsB, ...YearsF].sort();
 const ItemsPage = () => {
   const router = useRouter();
   const [items, setItems] = useState([]);
+  const [filtered, setFiltered] = useState([]);
   const [month, setMonth] = useState(null);
   const [year, setYear] = useState(null);
+  const [filter, setFilter] = useState('');
 
   useEffect(() => {
     const token = Cookies.get('wlt-token');
@@ -39,6 +41,21 @@ const ItemsPage = () => {
     fetchItems();
   }, [month, year]);
 
+  useEffect(() => {
+    if(items && items.length > 0 && filter && filter.length > 0){
+      let itemsFiltered = [];
+
+      items.map(i => {
+        if(i.desc.includes(filter) || i.desc.toLowerCase().includes(filter))
+          itemsFiltered.push(i);
+      });
+
+      setFiltered(itemsFiltered);
+    } else {
+      setFiltered(items);
+    }
+  }, [filter]);
+
   const fetchItems = () => {
     if(month && year){
       const token = Cookies.get('wlt-token');
@@ -49,6 +66,7 @@ const ItemsPage = () => {
         }
       }).then(response => {
         setItems(response.data);
+        setFiltered(response.data);
       }).catch(error => console.error('Erro ao buscar itens:', error));
     }
   };
@@ -247,7 +265,16 @@ const ItemsPage = () => {
         {renderPendingLabel()}
       </div>
 
-      {items.map(item => (
+      <div className='text-filter'>
+        <input type='text' value={filter} placeholder='Busque por nome ou descrição'
+          onChange={(e) => setFilter(e.target.value)}
+        />
+        <button type='reset' onClick={() => setFilter('')}>
+          Limpar filtro
+        </button>
+      </div>
+
+      {filtered.map(item => (
         <div key={item._id} className="item">
           <div className='item-header'>
             <h3>{item.desc} {`${item.paid === true ? '(✅ pago)' : ''}`}</h3>
@@ -271,6 +298,9 @@ const ItemsPage = () => {
           <hr/>
         </div>
       ))}
+
+      {(!filtered || filtered.length === 0) 
+      && (<p className='nothing'>Nenhum item encontrado!</p>)}
     </div>
   </>
   );

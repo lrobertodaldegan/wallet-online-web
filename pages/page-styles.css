@@ -120,7 +120,7 @@ input, select {
   margin: 5% auto;
   border-radius: 10px;
   background-color: #fafafa;
-  background-image: url('./img/lines-background.png');
+  background-image: url('https://wallet.lucasrobertodev.com.br/_next/static/media/lines-background.48080b07.png');
   background-position: left;
   background-size: 50%;
   background-repeat: no-repeat;
@@ -271,6 +271,16 @@ input, select {
 .items-container .pending-values p b{
   color: #ff0000;
   white-space: nowrap;
+}
+.items-container .text-filter{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap:10px;
+}
+.items-container .text-filter input{
+  background-color: transparent;
 }
 .items-container .item{
   border-radius: 10px;
